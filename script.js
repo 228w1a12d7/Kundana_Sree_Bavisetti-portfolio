@@ -12,6 +12,25 @@ const revealObserver = new IntersectionObserver(
 
 document.querySelectorAll(".reveal").forEach((element) => revealObserver.observe(element));
 
+const themeToggle = document.querySelector("#theme-toggle");
+const storedTheme = localStorage.getItem("portfolio-theme");
+if (storedTheme === "dark") document.documentElement.dataset.theme = "dark";
+
+themeToggle?.addEventListener("click", () => {
+  const isDark = document.documentElement.dataset.theme === "dark";
+  document.documentElement.dataset.theme = isDark ? "light" : "dark";
+  localStorage.setItem("portfolio-theme", isDark ? "light" : "dark");
+  themeToggle.setAttribute("aria-label", isDark ? "Switch to dark mode" : "Switch to light mode");
+});
+
+const navigationLinks = [...document.querySelectorAll(".desktop-nav a")];
+const updateActiveNavigation = () => {
+  const currentHash = window.location.hash || "#top";
+  navigationLinks.forEach((link) => link.classList.toggle("active", link.getAttribute("href") === currentHash));
+};
+window.addEventListener("hashchange", updateActiveNavigation);
+updateActiveNavigation();
+
 const contactForm = document.querySelector("#contact-form");
 const formStatus = document.querySelector("#form-status");
 
